@@ -16,15 +16,6 @@ pygame.display.set_caption("Quiz des Super Héros")
 # Load font
 font = pygame.font.Font(None, 36)
 
-# Dictionary of questions and answers
-quiz = {
-    "Nom du premier super héros créé par DC Comics": "Superman",
-    "Quel est le vrai nom de Batman": "Bruce Wayne",
-    "Quel est le pouvoir de Wonder Woman": "Force et agilité surhumaines, expert en combat à mains nues et avec des armes",
-    "Quel est le super vilain ennemi de Spider-Man": "Green Goblin",
-    "Quel est le vrai nom de Captain America": "Steve Rogers"
-}
-
 # Function to draw text on the screen
 def draw_text(text, x, y):
     text_surface = font.render(text, True, (0, 0, 0))
@@ -33,12 +24,8 @@ def draw_text(text, x, y):
     window.blit(text_surface, text_rect)
 
 # Load background image
-background = pygame.image.load("background.jpg")
+background = pygame.image.load("./background.jpg")
 background = pygame.transform.scale(background, window_size)
-
-# Display background
-window.blit(background, (0, 0))
-
 # Quiz questions and answers
 quiz = [
     {
@@ -58,9 +45,10 @@ correct_answers = 0
 
 # Loop through the quiz questions
 for i, question_dict in enumerate(quiz):
-    # Clear the screen
-    window.fill((255, 255, 255))
-    
+
+    # Display background
+    window.blit(background, (0, 0))
+
     # Draw the question
     question = question_dict["question"]
     draw_text(question, width //2, height //2 - 100)
@@ -82,6 +70,7 @@ for i, question_dict in enumerate(quiz):
     pygame.display.update()
     
     # Wait for user to click on an answer
+    correct_answer = question_dict["correct"]
     user_answer = None
     while not user_answer:
         for event in pygame.event.get():
@@ -92,6 +81,8 @@ for i, question_dict in enumerate(quiz):
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 for k, answer_rect in enumerate(answer_rects):
                     if answer_rect.collidepoint(mouse_x, mouse_y):
-                        print("Vous avez sélectionné la réponse", answers[k])
+                        user_answer = answers[k]
+                        if user_answer == correct_answer:
+                            correct_answers += 1
                         break
                 break
