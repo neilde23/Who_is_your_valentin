@@ -48,11 +48,11 @@ answer_rects = []
 x = 85
 for i, answer in enumerate(answers):
     x += 250
-    if x > width - 250:
-        x = 335
-        y = height // 2 + 50
     y = height // 2
-    answer_rect = pygame.draw.rect(window, (), (x-100, y-25, 200, 50), 2, border_radius=10)
+    if x > width - 250:
+        x = 600
+        y = height // 2 + 150
+    answer_rect = pygame.draw.rect(window, (255, 215, 0), (x-100, y-25, 200, 50), 2, border_radius=10)
     draw_text(answer, x, y)
     answer_rects.append(answer_rect)
 
