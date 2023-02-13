@@ -17,8 +17,8 @@ pygame.display.set_caption("Quiz des Super Héros")
 font = pygame.font.Font(None, 36)
 
 # Function to draw text on the screen
-def draw_text(text, x, y):
-    text_surface = font.render(text, True, (0, 0, 0))
+def draw_text(text, x, y, font=font, color=(255, 255, 255)):
+    text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
     text_rect.center = (x, y)
     window.blit(text_surface, text_rect)
@@ -26,6 +26,37 @@ def draw_text(text, x, y):
 # Load background image
 background = pygame.image.load("./background.jpg")
 background = pygame.transform.scale(background, window_size)
+
+# change opacity of background image
+background.set_alpha(128)
+
+# Display background
+window.blit(background, (0, 0))
+# Display Title
+draw_text("Quiz des Super Héros", width // 2, 100)
+draw_text("Êtes vous vraiment fan des super héros Marvel ?", width // 2, 300)
+draw_text("Testez vos connaissances en répondant à ce quiz !", width // 2, 350)
+draw_text("Cliquez sur Start pour commencer !", width // 2, 400)
+rect = pygame.draw.rect(window, (255, 215, 0), (width // 2 - 100, 600, 200, 50), border_radius=10)
+draw_text("Start", width // 2, 620, color=(0, 0, 0))
+
+pygame.display.update()
+
+# Check if user clicked on the start button
+start = False
+while not start:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if rect.collidepoint(mouse_x, mouse_y):
+            # Change color of start button
+            rect = pygame.draw.rect(window, (255, 255, 0), (width // 2 - 100, 600, 200, 50), border_radius=10)
+            if event.type == pygame.MOUSEBUTTONUP:
+                start = True
+                break
+
 # Quiz questions and answers
 quiz = [
     {
@@ -37,7 +68,17 @@ quiz = [
         "question": "Quel est le nom du super-héros qui peut voler, a une vitesse surhumaine et une force surhumaine ?",
         "answers": ["Batman", "Superman", "Wonder Woman", "Cyclone"],
         "correct": "Superman"
-    }
+    },
+    {
+        "question" : "Qui est le super-héros qui a des pouvoirs de télékinésie et de téléportation ?",
+        "answers": ["Cyclope", "Magneto", "Cyclone", "Storm"],
+        "correct": "Cyclope"
+    },
+    {
+        "question": "Qui est l'ennemi juré de Spiderman ?",
+        "answers": ["Green Goblin", "Venom", "Lizard", "Doctor Octopus"],
+        "correct": "Green Goblin"
+    },
 ]
 
 # Keep track of the number of correct answers
@@ -46,8 +87,17 @@ correct_answers = 0
 # Loop through the quiz questions
 for i, question_dict in enumerate(quiz):
 
+    # Clear the screen
+    window.fill((0, 0, 0))
     # Display background
+    background.set_alpha(128)
     window.blit(background, (0, 0))
+
+    # Display question number
+    draw_text(f"Question {i + 1}/{len(quiz)}", width // 2, 100)
+
+    # Display score
+    draw_text(f"Score: {correct_answers}/{i}", width // 2, 150)
 
     # Draw the question
     question = question_dict["question"]
@@ -63,12 +113,12 @@ for i, question_dict in enumerate(quiz):
         if x > width - 250:
             x = 600
             y = height // 2 + 150
-        answer_rect = pygame.draw.rect(window, (255, 215, 0), (x-100, y-25, 200, 50), 2, border_radius=10)
+        answer_rect = pygame.draw.rect(window, (255, 215, 0), (x-100, y-25, 200, 50), border_radius=10)
         draw_text(answer, x, y)
         answer_rects.append(answer_rect)
-
-    pygame.display.update()
     
+    pygame.display.update()
+
     # Wait for user to click on an answer
     correct_answer = question_dict["correct"]
     user_answer = None
@@ -86,3 +136,34 @@ for i, question_dict in enumerate(quiz):
                             correct_answers += 1
                         break
                 break
+    
+
+# Clear the screen
+window.fill((0, 0, 0))
+
+# Display background
+background.set_alpha(128)
+window.blit(background, (0, 0))
+
+# Display score
+draw_text(f"Score: {correct_answers}/{len(quiz)}", width // 2, 150)
+
+# Display final message
+if correct_answers == len(quiz):
+    draw_text("Bravo ! Vous êtes un vrai fan des super héros Marvel !", width // 2, 300)
+elif correct_answers >= len(quiz) // 2:
+    draw_text("Pas mal ! Vous connaissez bien les super héros Marvel !", width // 2, 300)
+else:
+    draw_text("Vous connaissez peut-être les super héros Marvel...", width // 2, 300)
+    draw_text("Mais il vous faut plus d'entrainement !", width // 2, 350)
+
+pygame.display.update()
+
+# Wait for user to click on the screen
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+pygame.quit()
