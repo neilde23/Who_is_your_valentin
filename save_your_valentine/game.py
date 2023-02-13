@@ -79,6 +79,41 @@ quiz = [
         "answers": ["Green Goblin", "Venom", "Lizard", "Doctor Octopus"],
         "correct": "Green Goblin"
     },
+    {
+        "question": "Qui est le fondateur des Avengers ?",
+        "answers": ["Captain America", "Iron Man", "Thor", "Hulk"],
+        "correct": "Iron Man"
+    },
+    {
+        "question": "Qui est le leader des X-Men ?",
+        "answers": ["Professor X", "Wolverine", "Cyclops", "Jean Grey"],
+        "correct": "Professor X"
+    },
+    {
+        "question": "Quel est le vrai nom de Captain America ?",
+        "answers": ["Tony Stark", "Steve Rogers", "Bruce Banner", " Peter Parker"],
+        "correct": "Steve Rogers"
+    },
+    {
+        "question": "Qui est le père de Thor ?",
+        "answers": ["Odin", "Loki", "Heimdall", " Sif"],
+        "correct": "Odin"
+    },
+    {
+        "question": "Qui est le personnage joué par Robert Downey Jr. dans les films de l'univers cinématographique Marvel?",
+        "answers": ["Thor", "Iron Man", "The Hulk"],
+        "correct": "Iron Man"
+    },
+    {
+        "question": "Qui est le membre fondateur des Avengers qui n'est pas un super-héros ?",
+        "answers": ["Nick Fury", "Jarvis", "Happy Hogan"],
+        "correct": "Nick Fury"
+    },
+    {
+        "question": "Qui est considéré comme le leader original des Avengers ?",
+        "answers": ["Nick Fury", "Iron Man", "Captain America", "Thor"],
+        "correct": "Captain America"
+    }
 ]
 
 # Keep track of the number of correct answers
