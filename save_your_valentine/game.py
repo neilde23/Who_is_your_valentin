@@ -12,7 +12,9 @@ width = window_size[0]
 height = window_size[1]
 window = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Quiz des Super Héros")
-son = pygame.mixer.Sound("correct_answer.wav")
+song = pygame.mixer.Sound("correct.wav")
+music_game = pygame.mixer.Sound("song_game.wav")
+music_game.play()
 # Load font
 font = pygame.font.Font(None, 36)
 
@@ -182,7 +184,7 @@ for i, question_dict in enumerate(quiz):
                     if answer_rect.collidepoint(mouse_x, mouse_y):
                         user_answer = answers[k]
                         if user_answer == correct_answer:
-                            son.play()
+                            song.play()
                             correct_answers += 1
                         break
                 break
