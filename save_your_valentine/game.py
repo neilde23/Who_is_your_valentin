@@ -5,14 +5,14 @@ import pygame
 
 # Initialize Pygame
 pygame.init()
-
+pygame.mixer.init()
 # Set window size and title
 window_size = (1200, 800)
 width = window_size[0]
 height = window_size[1]
 window = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Quiz des Super Héros")
-
+son = pygame.mixer.Sound("correct_answer.wav")
 # Load font
 font = pygame.font.Font(None, 36)
 
@@ -39,12 +39,18 @@ draw_text("Testez vos connaissances en répondant à ce quiz !", width // 2, 350
 draw_text("Cliquez sur Start pour commencer !", width // 2, 400)
 rect = pygame.draw.rect(window, (255, 215, 0), (width // 2 - 100, 600, 200, 50), border_radius=10)
 draw_text("Start", width // 2, 620, color=(0, 0, 0))
-
 pygame.display.update()
 
 # Check if user clicked on the start button
 start = False
 while not start:
+    mouse = pygame.mouse.get_pos()
+    if rect.collidepoint(mouse):
+        rect = pygame.draw.rect(window, (255, 0, 0), (width // 2 - 100, 600, 200, 50), border_radius=10)
+        draw_text("Start", width // 2, 620, color=(0, 0, 0))
+    else:
+        rect = pygame.draw.rect(window, (255, 215, 0), (width // 2 - 100, 600, 200, 50), border_radius=10)
+        draw_text("Start", width // 2, 620, color=(0, 0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -56,6 +62,7 @@ while not start:
             if event.type == pygame.MOUSEBUTTONUP:
                 start = True
                 break
+    pygame.display.update()
 
 # Quiz questions and answers
 quiz = [
@@ -134,32 +141,39 @@ for i, question_dict in enumerate(quiz):
     # Display score
     draw_text(f"Score: {correct_answers}/{i}", width // 2, 150)
 
-    # Draw the question
-    question = question_dict["question"]
-    draw_text(question, width //2, height //2 - 100)
-    
-    # Draw the answers
-    answers = question_dict["answers"]
-    answer_rects = []
-    x = 85
-    for i, answer in enumerate(answers):
-        x += 250
-        y = height // 2
-        if x > width - 250:
-            x = 600
-            y = height // 2 + 150
-        answer_rect = pygame.draw.rect(window, (255, 215, 0), (x-100, y-25, 200, 50), border_radius=10)
-        draw_text(answer, x, y)
-        answer_rects.append(answer_rect)
-    
-    pygame.display.update()
-
     # Wait for user to click on an answer
     correct_answer = question_dict["correct"]
     user_answer = None
+    running = True
     while not user_answer:
+        # Draw the question
+        question = question_dict["question"]
+        draw_text(question, width //2, height //2 - 100)
+        
+        # Draw the answers
+        answers = question_dict["answers"]
+        answer_rects = []
+        x = 85
+        mouse = pygame.mouse.get_pos()
+        for i, answer in enumerate(answers):
+            x += 250
+            y = height // 2
+            if x > width - 250:
+                x = 600
+                y = height // 2 + 150
+            answer_rect = pygame.draw.rect(window, (0, 0, 0), (x-100, y-25, 200, 50), border_radius=10)
+            if answer_rect.collidepoint(mouse):
+                answer_rect = pygame.draw.rect(window, (255,0,0), answer_rect,border_radius=10)
+                draw_text(answer, x, y) 
+            else:
+                answer_rect = pygame.draw.rect(window, (255,215,0), answer_rect,border_radius=10)
+                draw_text(answer, x, y)
+            answer_rects.append(answer_rect)
+            pygame.display.update()
+            pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                running = False
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONUP:
@@ -168,10 +182,13 @@ for i, question_dict in enumerate(quiz):
                     if answer_rect.collidepoint(mouse_x, mouse_y):
                         user_answer = answers[k]
                         if user_answer == correct_answer:
+                            son.play()
                             correct_answers += 1
                         break
                 break
-    
+        pygame.display.flip()
+
+
 
 # Clear the screen
 window.fill((0, 0, 0))
